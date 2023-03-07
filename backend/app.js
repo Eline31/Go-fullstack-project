@@ -6,6 +6,7 @@ const app = express();
 const mongoose = require("mongoose");
 
 const stuffRoutes = require("./routes/stuff");
+const userRoutes = require("./routes/user");
 
 mongoose.connect("mongodb+srv://User1:1Fjqe9HlN9pUh5yM@cluster0.2ol13jn.mongodb.net/?retryWrites=true&w=majority",
     {
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use("/api/stuff", stuffRoutes);
+app.use("/api/auth", userRoutes);
 
 //Export d'app pour pouvoir l'utiliser ailleurs
 module.exports = app;
