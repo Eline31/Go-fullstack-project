@@ -43,6 +43,13 @@ app.post("/api/stuff", (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 });
 
+//le :id sinifique que cette partie de la route est dynamique
+app.get("/api/stuff/:id", (req, res, next) => {
+    Thing.findOne({ _id: req.params.id })
+        .then(thing => res.status(200).json(thing))
+        .catch(error => res.status(404).json({ error }));
+});
+
 ///api/stuff est l'url visée par l'application, la route sur notre API
 app.get("/api/stuff", (req, res, next) => {
     Thing.find()
