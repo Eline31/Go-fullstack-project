@@ -5,6 +5,9 @@ const app = express();
 //Import de mongoose
 const mongoose = require("mongoose");
 
+//On importe le modèle Thing que l'on a créé
+const Thing = require("./models/Thing");
+
 mongoose.connect("mongodb+srv://User1:1Fjqe9HlN9pUh5yM@cluster0.2ol13jn.mongodb.net/?retryWrites=true&w=majority",
     {
         useNewUrlParser: true,
@@ -28,11 +31,17 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/stuff", (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message: "Objet créé"
+    //Suppression du champs id qui ne sera pas le bon car générer automatiquement par la BDD
+    delete req.body._id;
+    const thing = new Thing({
+        //utilisation de ... (spread) pour récupérer et copier le contenu du body 
+        ...req.body
     });
-})
+    //La méthode save() renvoie une promesse
+    thing.save()
+        .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+        .catch((error) => res.status(400).json({ error }));
+});
 
 ///api/stuff est l'url visée par l'application, la route sur notre API
 app.get("/api/stuff", (req, res, next) => {
