@@ -45,25 +45,9 @@ app.post("/api/stuff", (req, res, next) => {
 
 ///api/stuff est l'url visée par l'application, la route sur notre API
 app.get("/api/stuff", (req, res, next) => {
-    const stuff = [
-        {
-            _id: "fkepokf",
-            title: "Mon premier objet",
-            description: "Les infos de mon premier objet",
-            imageUrl: "",
-            price: 4900,
-            userId: "kpfrpkf",
-        },
-        {
-            _id: "jfeozgg",
-            title: "Mon deuxième objet",
-            description: "Les infos de mon deuxième objet",
-            imageUrl: "",
-            price: 2900,
-            userId: "joivzjv",
-        },
-    ];
-    res.status(200).json(stuff);
+    Thing.find()
+        .then(things => res.status(200).json(things))
+        .catch(error => res.status(400).json({ error }));
 });
 
 //Export d'app pour pouvoir l'utiliser ailleurs
