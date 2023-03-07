@@ -2,6 +2,17 @@ const express = require("express");
 //Appel de la méthode express
 const app = express();
 
+//Import de mongoose
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb+srv://User1:1Fjqe9HlN9pUh5yM@cluster0.2ol13jn.mongodb.net/?retryWrites=true&w=majority",
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => console.log("Connexion à MongoDB réussie !"))
+    .catch(() => console.log("Connexion à MongoDB échouée !"));
+
 //Middleware qui intercepte les req qui ont un content-type json, permet d'accéder au body de la requête, comme bodyparser
 app.use(express.json());
 
