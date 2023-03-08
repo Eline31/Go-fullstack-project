@@ -1,16 +1,30 @@
 const Thing = require("../models/Thing");
 
+// exports.createThing = (req, res, next) => {
+//     //Suppression du champs id qui ne sera pas le bon car générer automatiquement par la BDD
+//     delete req.body._id;
+//     const thing = new Thing({
+//         //utilisation de ... (spread) pour récupérer et copier le contenu du body 
+//         ...req.body
+//     });
+//     //La méthode save() renvoie une promesse
+//     thing.save()
+//         .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+//         .catch((error) => res.status(400).json({ error }));
+// };
+
 exports.createThing = (req, res, next) => {
-    //Suppression du champs id qui ne sera pas le bon car générer automatiquement par la BDD
-    delete req.body._id;
+    const thingObject = JSON.parse(req.body.thing);
+    delete thingObject._id;
+    delete thingObject._userId;
     const thing = new Thing({
-        //utilisation de ... (spread) pour récupérer et copier le contenu du body 
-        ...req.body
+        ...thingObject,
+        userId: req.auth.userId,
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
     });
-    //La méthode save() renvoie une promesse
     thing.save()
         .then(() => res.status(201).json({ message: "Objet enregistré !" }))
-        .catch((error) => res.status(400).json({ error }));
+        .catch(error => res.status(400).json({ error }));
 };
 
 exports.modifyThing = (req, res, next) => {
